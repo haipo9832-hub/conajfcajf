@@ -168,3 +168,66 @@ body {
 .shake {
     animation: shake 0.4s ease-in-out;
 }
+
+/* Checkbox Styling */
+.cyber-checkbox {
+    display: block;
+    position: relative;
+    padding-left: 35px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    user-select: none;
+    color: #FFFFFF;
+}
+
+.cyber-checkbox input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+}
+
+.checkmark {
+    position: absolute;
+    top: -2px;
+    left: 0;
+    height: 20px;
+    width: 20px;
+    background-color: #121318;
+    border: 1px solid #1f2229;
+    border-radius: 4px;
+    transition: all 0.2s;
+}
+
+.cyber-checkbox:hover input ~ .checkmark {
+    border-color: #00C3FF;
+}
+
+.cyber-checkbox input:checked ~ .checkmark {
+    background-color: #00C3FF;
+    border-color: #00C3FF;
+    box-shadow: 0 0 10px rgba(0, 195, 255, 0.5);
+}
+
+.checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+}
+
+.cyber-checkbox input:checked ~ .checkmark:after {
+    display: block;
+}
+
+.cyber-checkbox .checkmark:after {
+    left: 6px;
+    top: 2px;
+    width: 5px;
+    height: 10px;
+    border: solid #000;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+}
