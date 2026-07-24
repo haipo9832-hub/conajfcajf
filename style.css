@@ -61,6 +61,10 @@ body {
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
     display: flex;
     flex-direction: column;
+    /* Allow the card to grow/shrink based on content */
+    height: auto;
+    max-height: 90vh;
+    overflow-y: auto;
 }
 
 .title {
