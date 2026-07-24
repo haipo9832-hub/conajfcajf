@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <!-- Web App manifest and meta tags for iOS -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>Migul Lite VIP</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Video Background Container -->
+    <div class="video-container">
+        <video autoplay loop muted playsinline id="bg-video">
+            <source src="assets/bg_video.mp4" type="video/mp4">
+        </video>
+        <!-- Semi-transparent overlay -->
+        <div class="video-overlay"></div>
+    </div>
+
+    <!-- Main Card Container -->
+    <div class="card-container">
+        <h1 class="title">MIGUL LITE VIP</h1>
+        <hr class="divider">
+
+        <!-- Login Section -->
+        <div id="login-view" class="view-section active">
+            <input type="password" id="key-input" class="cyber-input" placeholder="Nhập Key để truy cập VIP...">
+            
+            <button class="cyber-btn cyber-btn-default" onclick="openZalo('https://zalo.me/g/aafmgt330')">LẤY KEY ZALO BOX 1</button>
+            <button class="cyber-btn cyber-btn-default" onclick="openZalo('https://zalo.me/g/xpimti503')">LẤY KEY ZALO BOX 2</button>
+            
+            <button class="cyber-btn cyber-btn-active" id="btn-login" style="margin-top: 16px;">ĐĂNG NHẬP</button>
+            
+            <div id="error-message" class="error-text" style="display: none;">Key Fail hãy click vô lấy key để lấy</div>
+        </div>
+
+        <!-- Inject Section (Hidden initially) -->
+        <div id="inject-view" class="view-section" style="display: none;">
+            <div class="success-text">KÍCH HOẠT THÀNH CÔNG</div>
+            <button class="cyber-btn cyber-btn-active" id="btn-open-menu" style="margin-top: 12px;">BẬT MENU NỔI</button>
+        </div>
+    </div>
+
+    <script>
+        const btnLogin = document.getElementById('btn-login');
+        const keyInput = document.getElementById('key-input');
+        const loginView = document.getElementById('login-view');
+        const injectView = document.getElementById('inject-view');
+        const errorMessage = document.getElementById('error-message');
+        const btnOpenMenu = document.getElementById('btn-open-menu');
+
+        function openZalo(url) {
+            window.location.href = url;
+        }
+
+        btnLogin.addEventListener('click', () => {
+            const enteredKey = keyInput.value.trim();
+            if (enteredKey === "POMOD-8787X-SECHVN") {
+                loginView.style.display = 'none';
+                injectView.style.display = 'flex';
+                errorMessage.style.display = 'none';
+            } else {
+                // Shake effect
+                keyInput.classList.add('shake');
+                errorMessage.style.display = 'block';
+                setTimeout(() => {
+                    keyInput.classList.remove('shake');
+                }, 500);
+            }
+        });
+
+        btnOpenMenu.addEventListener('click', () => {
+            alert("Trên iOS, việc chạy Menu Nổi chồng lên ứng dụng khác là không khả thi do giới hạn của hệ điều hành Apple. Giao diện Web này được tạo ra để trưng bày hoặc sử dụng Web App.");
+        });
+    </script>
+</body>
+</html>
