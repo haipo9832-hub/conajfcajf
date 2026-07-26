@@ -10,6 +10,47 @@ document.addEventListener('DOMContentLoaded', () => {
     const cbOpenLineAim = document.getElementById('cb_open_line_aim');
     const crosshairContainer = document.getElementById('crosshair-container');
 
+    // Login Overlay Elements
+    const loginOverlay = document.getElementById('login-overlay');
+    const inputKey = document.getElementById('input-key');
+    const btnLoginSubmit = document.getElementById('btn-login');
+    const btnGetKey1 = document.getElementById('btn-get-key-1');
+    const btnGetKey2 = document.getElementById('btn-get-key-2');
+
+    // Handle Login
+    btnLoginSubmit.addEventListener('click', () => {
+        const enteredKey = inputKey.value.trim();
+        if (enteredKey === 'POMOD-8787X-SECHVN') {
+            // Success
+            toast.textContent = 'Key success';
+            toast.classList.remove('hidden');
+            toast.style.animation = 'none';
+            setTimeout(() => { toast.style.animation = 'fadeInOut 3s forwards'; }, 10);
+            setTimeout(() => { toast.classList.add('hidden'); toast.textContent = 'chào mừng bạn đến với migul lite by pô mod'; }, 3000);
+            
+            loginOverlay.classList.add('hidden');
+            menuOverlay.classList.remove('hidden');
+        } else {
+            // Fail
+            toast.textContent = 'Key Fail hãy click vô lấy key để lấy';
+            toast.classList.remove('hidden');
+            toast.style.animation = 'none';
+            setTimeout(() => { toast.style.animation = 'fadeInOut 3s forwards'; }, 10);
+            setTimeout(() => { toast.classList.add('hidden'); toast.textContent = 'chào mừng bạn đến với migul lite by pô mod'; }, 3000);
+            
+            inputKey.classList.add('shake');
+            setTimeout(() => { inputKey.classList.remove('shake'); }, 500);
+        }
+    });
+
+    btnGetKey1.addEventListener('click', () => {
+        window.open('https://zalo.me/g/aafmgt330', '_blank');
+    });
+
+    btnGetKey2.addEventListener('click', () => {
+        window.open('https://zalo.me/g/xpimti503', '_blank');
+    });
+
     // Make entire feature item clickable for the checkboxes
     const featureItems = document.querySelectorAll('.feature-item');
     featureItems.forEach(item => {
