@@ -3,170 +3,163 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <!-- Web App manifest and meta tags for iOS -->
+    <!-- iOS Web App Meta Tags -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>Migul Lite VIP</title>
+    <meta name="apple-mobile-web-app-title" content="Migul Lite">
+    <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+    <link rel="manifest" href="manifest.json">
+    <title>Migul Lite</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <!-- Video Background Container -->
-    <div class="video-container">
-        <video autoplay loop muted playsinline id="bg-video">
-            <source src="bg_video.mp4" type="video/mp4">
-        </video>
-        <!-- Semi-transparent overlay -->
-        <div class="video-overlay"></div>
+    <!-- Background Video -->
+    <video autoplay loop muted playsinline id="bg-video">
+        <source src="assets/l4oaly.mp4" type="video/mp4">
+    </video>
+    
+    <!-- Crosshair (Open Line Aim) -->
+    <div id="crosshair-container" class="hidden">
+        <div class="crosshair-circle"></div>
+        <div class="crosshair-inner"></div>
     </div>
 
-    <!-- Main Card Container -->
-    <div class="card-container">
-        <h1 class="title">MIGUL LITE VIP</h1>
+    <!-- Toast Notification -->
+    <div id="toast" class="hidden">chào mừng bạn đến với migul lite by pô mod</div>
+
+    <!-- Floating Menu Overlay -->
+    <div id="menu-overlay" class="glass-panel">
+        <!-- Header -->
+        <div class="header">
+            <div class="title-container">
+                <span class="title">MIGUL LITE</span>
+                <span class="version">v1.0</span>
+            </div>
+            <div class="window-controls">
+                <button class="control-btn" id="btn-minimize">—</button>
+                <button class="control-btn" id="btn-close">✕</button>
+            </div>
+        </div>
+        
         <hr class="divider">
-
-        <!-- Login Section -->
-        <div id="login-view" class="view-section active">
-            <input type="password" id="key-input" class="cyber-input" placeholder="Nhập Key để truy cập VIP...">
-            
-            <button class="cyber-btn cyber-btn-default" onclick="openZalo('https://zalo.me/g/aafmgt330')">LẤY KEY ZALO BOX 1</button>
-            <button class="cyber-btn cyber-btn-default" onclick="openZalo('https://zalo.me/g/xpimti503')">LẤY KEY ZALO BOX 2</button>
-            
-            <button class="cyber-btn cyber-btn-active" id="btn-login" style="margin-top: 16px;">ĐĂNG NHẬP</button>
-            
-            <div id="error-message" class="error-text" style="display: none;">Key Fail hãy click vô lấy key để lấy</div>
-        </div>
-
-        <!-- Inject Section (Hidden initially) -->
-        <div id="inject-view" class="view-section" style="display: none;">
-            <div class="success-text">KÍCH HOẠT THÀNH CÔNG</div>
-            <button class="cyber-btn cyber-btn-active" id="btn-open-menu" style="margin-top: 12px;">BẬT MENU NỔI</button>
-        </div>
-
-        <!-- App Menu Section (Hidden initially) -->
-        <div id="app-menu-view" class="view-section" style="display: none;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
-                <span style="font-weight: bold; color: #00C3FF;">MIGUL LITE v1.0</span>
-                <span id="tv-fps" style="color: #00FF66; font-size: 14px; font-weight: bold;">FPS: 60</span>
+        
+        <!-- Device Info -->
+        <div class="device-panel">
+            <div class="device-name">Apple Web App Environment</div>
+            <div class="device-stats">
+                <span>RAM: Optimized</span>
+                <span>BAT: 100%</span>
+                <span class="fps-text" id="fps-display">FPS: 60</span>
             </div>
-            
-            <div class="menu-list">
-                <label class="cyber-checkbox">
-                    <input type="checkbox"> 
-                    <span class="checkmark"></span>
-                    Aimbot
-                </label>
-                <label class="cyber-checkbox">
-                    <input type="checkbox"> 
-                    <span class="checkmark"></span>
-                    Aimlock
-                </label>
-                <label class="cyber-checkbox">
-                    <input type="checkbox"> 
-                    <span class="checkmark"></span>
-                    DPI Config
-                </label>
-                <label class="cyber-checkbox">
-                    <input type="checkbox"> 
-                    <span class="checkmark"></span>
-                    DPI Optimize
-                </label>
-                <label class="cyber-checkbox">
-                    <input type="checkbox"> 
-                    <span class="checkmark"></span>
-                    AimShot Pro
-                </label>
-            </div>
-
-            <button class="cyber-btn cyber-btn-default" id="btn-advanced-web" style="margin-top: 16px;">▼ Advanced Settings</button>
-            <div id="advanced-panel-web" style="display: none; margin-top: 8px;">
-                <label class="cyber-checkbox">
-                    <input type="checkbox"> 
-                    <span class="checkmark"></span>
-                    Tàng Hình
-                </label>
-                <label class="cyber-checkbox">
-                    <input type="checkbox"> 
-                    <span class="checkmark"></span>
-                    Chạy Nhanh x10
-                </label>
-            </div>
-            
-            <button class="cyber-btn cyber-btn-active" id="btn-activate-web" style="margin-top: 16px;">ACTIVATE</button>
         </div>
+        
+        <!-- Features List -->
+        <div class="features-list">
+            <!-- Item 1 -->
+            <label class="feature-item">
+                <div class="feature-info">
+                    <span class="feature-name">Aimlock Engine</span>
+                    <span class="feature-desc">Tinh Chỉnh Lock Vùng Đầu</span>
+                </div>
+                <div class="toggle-container">
+                    <input type="checkbox" class="cyber-toggle" id="cb_aimlock">
+                    <span class="toggle-slider"></span>
+                </div>
+            </label>
+            
+            <!-- Item 2 -->
+            <label class="feature-item">
+                <div class="feature-info">
+                    <span class="feature-name">Performance Engine</span>
+                    <span class="feature-desc">Tăng Hiệu Năng Hệ Thống</span>
+                </div>
+                <div class="toggle-container">
+                    <input type="checkbox" class="cyber-toggle" id="cb_performance">
+                    <span class="toggle-slider"></span>
+                </div>
+            </label>
+            
+            <!-- Item 3 -->
+            <label class="feature-item">
+                <div class="feature-info">
+                    <span class="feature-name">FPS Booster</span>
+                    <span class="feature-desc">Ổn Định Tốc Độ Khung Hình</span>
+                </div>
+                <div class="toggle-container">
+                    <input type="checkbox" class="cyber-toggle" id="cb_fps">
+                    <span class="toggle-slider"></span>
+                </div>
+            </label>
+
+            <!-- Item 4 -->
+            <label class="feature-item">
+                <div class="feature-info">
+                    <span class="feature-name">Network Optimizer</span>
+                    <span class="feature-desc">Tối Ưu Kết Nối Mạng</span>
+                </div>
+                <div class="toggle-container">
+                    <input type="checkbox" class="cyber-toggle" id="cb_network">
+                    <span class="toggle-slider"></span>
+                </div>
+            </label>
+            
+            <!-- Item 5 -->
+            <label class="feature-item">
+                <div class="feature-info">
+                    <span class="feature-name">Touch Response</span>
+                    <span class="feature-desc">Tăng Độ Nhạy Thao Tác Cảm Ứng</span>
+                </div>
+                <div class="toggle-container">
+                    <input type="checkbox" class="cyber-toggle" id="cb_touch">
+                    <span class="toggle-slider"></span>
+                </div>
+            </label>
+            
+            <!-- Item 6 -->
+            <label class="feature-item">
+                <div class="feature-info">
+                    <span class="feature-name">Open Line Aim</span>
+                    <span class="feature-desc">Mở Vòng Tròn Ngoại Tâm</span>
+                </div>
+                <div class="toggle-container">
+                    <input type="checkbox" class="cyber-toggle" id="cb_open_line_aim">
+                    <span class="toggle-slider"></span>
+                </div>
+            </label>
+
+            <!-- Item 7 -->
+            <label class="feature-item">
+                <div class="feature-info">
+                    <span class="feature-name">Smart Sensitivity</span>
+                    <span class="feature-desc">Tinh Chỉnh Độ Nhạy Thiết Bị</span>
+                </div>
+                <div class="toggle-container">
+                    <input type="checkbox" class="cyber-toggle" id="cb_smart_sens">
+                    <span class="toggle-slider"></span>
+                </div>
+            </label>
+            
+            <!-- Item 8 -->
+            <label class="feature-item">
+                <div class="feature-info">
+                    <span class="feature-name">Graphics Control</span>
+                    <span class="feature-desc">Tối Ưu Hiển Thị Đồ Họa</span>
+                </div>
+                <div class="toggle-container">
+                    <input type="checkbox" class="cyber-toggle" id="cb_graphics">
+                    <span class="toggle-slider"></span>
+                </div>
+            </label>
+        </div>
+        
+        <button id="btn_activate" class="btn-cyber-default">ACTIVATE</button>
     </div>
 
-    <script>
-        const btnLogin = document.getElementById('btn-login');
-        const keyInput = document.getElementById('key-input');
-        const loginView = document.getElementById('login-view');
-        const injectView = document.getElementById('inject-view');
-        const appMenuView = document.getElementById('app-menu-view');
-        const errorMessage = document.getElementById('error-message');
-        const btnOpenMenu = document.getElementById('btn-open-menu');
-        const tvFps = document.getElementById('tv-fps');
+    <!-- Minimized Icon -->
+    <div id="minimized-icon" class="hidden">
+        <img src="assets/oke124141.png" alt="Migul Icon">
+    </div>
 
-        // Advanced Toggle
-        const btnAdvancedWeb = document.getElementById('btn-advanced-web');
-        const advancedPanelWeb = document.getElementById('advanced-panel-web');
-        let isAdvancedOpen = false;
-
-        btnAdvancedWeb.addEventListener('click', () => {
-            isAdvancedOpen = !isAdvancedOpen;
-            if (isAdvancedOpen) {
-                advancedPanelWeb.style.display = 'block';
-                btnAdvancedWeb.textContent = '▲ Hide Settings';
-            } else {
-                advancedPanelWeb.style.display = 'none';
-                btnAdvancedWeb.textContent = '▼ Advanced Settings';
-            }
-        });
-
-        // Activate Button Toggle
-        const btnActivateWeb = document.getElementById('btn-activate-web');
-        btnActivateWeb.addEventListener('click', () => {
-            if (btnActivateWeb.textContent === 'ACTIVATE') {
-                btnActivateWeb.textContent = 'RUNNING';
-                btnActivateWeb.style.boxShadow = '0 0 15px rgba(0, 255, 102, 0.6)';
-                btnActivateWeb.style.background = 'linear-gradient(180deg, #00FF66 0%, #00cc52 100%)';
-            } else {
-                btnActivateWeb.textContent = 'ACTIVATE';
-                btnActivateWeb.style.boxShadow = '0 0 15px rgba(0, 195, 255, 0.4)';
-                btnActivateWeb.style.background = 'linear-gradient(180deg, #00C3FF 0%, #0088ff 100%)';
-            }
-        });
-
-        function openZalo(url) {
-            window.location.href = url;
-        }
-
-        btnLogin.addEventListener('click', () => {
-            const enteredKey = keyInput.value.trim();
-            if (enteredKey === "POMOD-8787X-SECHVN") {
-                loginView.style.display = 'none';
-                injectView.style.display = 'flex';
-                errorMessage.style.display = 'none';
-            } else {
-                // Shake effect
-                keyInput.classList.add('shake');
-                errorMessage.style.display = 'block';
-                setTimeout(() => {
-                    keyInput.classList.remove('shake');
-                }, 500);
-            }
-        });
-
-        btnOpenMenu.addEventListener('click', () => {
-            document.querySelector('.title').style.display = 'none';
-            document.querySelector('.divider').style.display = 'none';
-            injectView.style.display = 'none';
-            appMenuView.style.display = 'flex';
-            
-            // Random FPS
-            setInterval(() => {
-                const fps = Math.floor(Math.random() * (62 - 58 + 1)) + 58;
-                tvFps.textContent = "FPS: " + fps;
-            }, 800);
-        });
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>

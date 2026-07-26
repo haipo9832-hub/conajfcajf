@@ -2,236 +2,341 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-}
-
-body {
-    background-color: #101114;
-    color: #FFFFFF;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    overflow: hidden;
-    position: relative;
-    /* Prevent text selection and zooming on iOS */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     user-select: none;
     -webkit-user-select: none;
-    touch-action: pan-x pan-y;
+    -webkit-touch-callout: none;
 }
 
-.video-container {
-    position: absolute;
-    top: 0;
-    left: 0;
+body, html {
     width: 100%;
     height: 100%;
-    z-index: -1;
     overflow: hidden;
+    background-color: #000;
 }
 
+/* Background Video */
 #bg-video {
+    position: fixed;
+    top: 50%;
+    left: 50%;
     min-width: 100%;
     min-height: 100%;
     width: auto;
     height: auto;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    transform: translateX(-50%) translateY(-50%);
     object-fit: cover;
+    z-index: 1;
 }
 
-.video-overlay {
-    position: absolute;
+/* Semi-transparent overlay to make UI readable */
+body::after {
+    content: "";
+    position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.7); /* #B3000000 */
+    background: rgba(0, 0, 0, 0.4);
+    z-index: 2;
 }
 
-.card-container {
-    width: 90%;
-    max-width: 400px;
-    background: linear-gradient(145deg, #181A20, #14151a);
+/* Main Container (Glassmorphism) */
+.glass-panel {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 260px; /* Slightly wider for mobile web */
+    background: rgba(20, 25, 40, 0.65);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     border: 1px solid rgba(0, 195, 255, 0.2);
-    border-radius: 14px;
-    padding: 24px;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+    border-radius: 16px;
+    padding: 12px;
+    z-index: 10;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5), inset 0 0 10px rgba(0, 195, 255, 0.1);
     display: flex;
     flex-direction: column;
-    /* Allow the card to grow/shrink based on content */
-    height: auto;
-    max-height: 90vh;
-    overflow-y: auto;
+}
+
+/* Header */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.title-container {
+    display: flex;
+    align-items: baseline;
+    gap: 4px;
 }
 
 .title {
-    text-align: center;
-    font-size: 28px;
+    color: #fff;
+    font-size: 16px;
     font-weight: bold;
-    color: #FFFFFF;
-    text-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+    text-shadow: 0 0 5px rgba(0, 195, 255, 0.5);
+}
+
+.version {
+    color: #00C3FF;
+    font-size: 10px;
+    font-weight: bold;
+}
+
+.window-controls {
+    display: flex;
+    gap: 8px;
+}
+
+.control-btn {
+    background: none;
+    border: none;
+    color: #8da1b9;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    padding: 4px;
+}
+
+.control-btn:active {
+    color: #00C3FF;
 }
 
 .divider {
+    border: 0;
     height: 1px;
-    background-color: rgba(0, 195, 255, 0.3);
-    border: none;
-    margin: 12px 0 16px 0;
+    background: rgba(0, 195, 255, 0.2);
+    margin-bottom: 12px;
 }
 
-.view-section {
+/* Device Info Panel */
+.device-panel {
+    background: rgba(10, 15, 30, 0.8);
+    border: 1px solid rgba(0, 195, 255, 0.3);
+    border-radius: 8px;
+    padding: 8px;
+    margin-bottom: 12px;
+}
+
+.device-name {
+    color: #fff;
+    font-size: 12px;
+    font-weight: bold;
+    margin-bottom: 6px;
+}
+
+.device-stats {
+    display: flex;
+    justify-content: space-between;
+    color: #8da1b9;
+    font-size: 10px;
+}
+
+.fps-text {
+    color: #00FF55;
+    font-weight: bold;
+    text-shadow: 0 0 5px rgba(0, 255, 85, 0.5);
+}
+
+/* Features List */
+.features-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    max-height: 250px;
+    overflow-y: auto;
+    padding-right: 4px;
+}
+
+/* Scrollbar styling */
+.features-list::-webkit-scrollbar {
+    width: 4px;
+}
+.features-list::-webkit-scrollbar-thumb {
+    background: rgba(0, 195, 255, 0.5);
+    border-radius: 4px;
+}
+
+.feature-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+}
+
+.feature-info {
     display: flex;
     flex-direction: column;
 }
 
-.cyber-input {
-    width: 100%;
-    height: 50px;
-    background-color: #121318;
-    border: 1px solid #1f2229;
-    border-radius: 8px;
-    padding: 0 16px;
-    color: #FFFFFF;
-    font-size: 14px;
-    font-weight: bold;
-    outline: none;
-    margin-bottom: 16px;
-    transition: border-color 0.3s;
-}
-
-.cyber-input:focus {
-    border-color: #00C3FF;
-}
-
-.cyber-input::placeholder {
-    color: #888888;
-}
-
-.cyber-btn {
-    width: 100%;
-    height: 48px;
-    border-radius: 8px;
-    font-size: 14px;
-    font-weight: bold;
-    cursor: pointer;
-    margin-bottom: 8px;
-    border: none;
-    transition: all 0.2s;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.cyber-btn:active {
-    transform: scale(0.98);
-}
-
-.cyber-btn-default {
-    background: linear-gradient(180deg, #242730 0%, #1a1c23 100%);
-    color: #FFFFFF;
-    border: 1px solid #333845;
-}
-
-.cyber-btn-active {
-    background: linear-gradient(180deg, #00C3FF 0%, #0088ff 100%);
-    color: #FFFFFF;
-    box-shadow: 0 0 15px rgba(0, 195, 255, 0.4);
-    height: 52px;
-    font-size: 16px;
-}
-
-.success-text {
-    text-align: center;
-    padding: 12px;
-    color: #00FF66; /* cyber_success */
-    font-size: 18px;
-    font-weight: bold;
-    text-shadow: 0 0 10px rgba(0, 255, 102, 0.3);
-}
-
-.error-text {
-    color: #FF3333;
-    font-size: 12px;
-    text-align: center;
-    margin-top: 8px;
+.feature-name {
+    color: #fff;
+    font-size: 13px;
     font-weight: bold;
 }
 
-/* Shake Animation */
-@keyframes shake {
-    0% { transform: translateX(0); }
-    25% { transform: translateX(-5px); }
-    50% { transform: translateX(5px); }
-    75% { transform: translateX(-5px); }
-    100% { transform: translateX(0); }
+.feature-desc {
+    color: #8da1b9;
+    font-size: 9px;
+    margin-top: 2px;
 }
 
-.shake {
-    animation: shake 0.4s ease-in-out;
-}
-
-/* Checkbox Styling */
-.cyber-checkbox {
-    display: block;
+/* Cyber Toggle (Custom Checkbox) */
+.toggle-container {
     position: relative;
-    padding-left: 35px;
-    margin-bottom: 12px;
-    cursor: pointer;
-    font-size: 14px;
-    font-weight: bold;
-    user-select: none;
-    color: #FFFFFF;
+    width: 40px;
+    height: 22px;
 }
 
-.cyber-checkbox input {
-    position: absolute;
+.cyber-toggle {
     opacity: 0;
-    cursor: pointer;
-    height: 0;
     width: 0;
+    height: 0;
 }
 
-.checkmark {
+.toggle-slider {
     position: absolute;
-    top: -2px;
-    left: 0;
-    height: 20px;
-    width: 20px;
-    background-color: #121318;
-    border: 1px solid #1f2229;
-    border-radius: 4px;
-    transition: all 0.2s;
+    cursor: pointer;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(0, 195, 255, 0.3);
+    border-radius: 11px;
+    transition: .3s;
 }
 
-.cyber-checkbox:hover input ~ .checkmark {
-    border-color: #00C3FF;
-}
-
-.cyber-checkbox input:checked ~ .checkmark {
-    background-color: #00C3FF;
-    border-color: #00C3FF;
-    box-shadow: 0 0 10px rgba(0, 195, 255, 0.5);
-}
-
-.checkmark:after {
+.toggle-slider:before {
+    position: absolute;
     content: "";
+    height: 16px;
+    width: 16px;
+    left: 2px;
+    bottom: 2px;
+    background-color: #fff;
+    border-radius: 50%;
+    transition: .3s;
+    box-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+}
+
+.cyber-toggle:checked + .toggle-slider {
+    background-color: rgba(0, 195, 255, 0.4);
+    border-color: #00C3FF;
+    box-shadow: 0 0 10px rgba(0, 195, 255, 0.4);
+}
+
+.cyber-toggle:checked + .toggle-slider:before {
+    transform: translateX(18px);
+    background-color: #00C3FF;
+    box-shadow: 0 0 8px #00C3FF;
+}
+
+/* Activate Button */
+.btn-cyber-default {
+    margin-top: 16px;
+    width: 100%;
+    padding: 10px;
+    background: transparent;
+    border: 1px solid #00C3FF;
+    color: #00C3FF;
+    font-size: 13px;
+    font-weight: bold;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: 0.3s;
+    text-shadow: 0 0 5px rgba(0, 195, 255, 0.5);
+    box-shadow: inset 0 0 10px rgba(0, 195, 255, 0.2);
+}
+
+.btn-cyber-default.active {
+    background: rgba(0, 195, 255, 0.2);
+    border-color: #00FF55;
+    color: #00FF55;
+    text-shadow: 0 0 5px rgba(0, 255, 85, 0.5);
+    box-shadow: inset 0 0 15px rgba(0, 255, 85, 0.3);
+}
+
+/* Minimized Icon */
+#minimized-icon {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    overflow: hidden;
+    z-index: 20;
+    box-shadow: 0 0 15px rgba(0, 195, 255, 0.5);
+    border: 2px solid #00C3FF;
+    cursor: pointer;
+}
+
+#minimized-icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Hidden Class */
+.hidden {
+    display: none !important;
+}
+
+/* Crosshair (Open Line Aim) */
+#crosshair-container {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100px;
+    height: 100px;
+    pointer-events: none;
+    z-index: 5; /* Below menu, above video */
+}
+
+.crosshair-circle {
     position: absolute;
-    display: none;
+    width: 100%;
+    height: 100%;
+    border: 2px solid #00C3FF;
+    border-radius: 50%;
+    box-shadow: 0 0 10px #00C3FF, inset 0 0 10px #00C3FF;
 }
 
-.cyber-checkbox input:checked ~ .checkmark:after {
-    display: block;
+.crosshair-inner {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 4px;
+    height: 4px;
+    background-color: #00C3FF;
+    border-radius: 50%;
+    box-shadow: 0 0 8px #00C3FF;
 }
 
-.cyber-checkbox .checkmark:after {
-    left: 6px;
-    top: 2px;
-    width: 5px;
-    height: 10px;
-    border: solid #000;
-    border-width: 0 2px 2px 0;
-    transform: rotate(45deg);
+/* Toast */
+#toast {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 195, 255, 0.8);
+    color: #fff;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: bold;
+    z-index: 50;
+    box-shadow: 0 0 15px rgba(0, 195, 255, 0.5);
+    animation: fadeInOut 3s forwards;
+}
+
+@keyframes fadeInOut {
+    0% { opacity: 0; bottom: 10px; }
+    10% { opacity: 1; bottom: 30px; }
+    90% { opacity: 1; bottom: 30px; }
+    100% { opacity: 0; bottom: 10px; }
 }
