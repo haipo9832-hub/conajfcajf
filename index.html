@@ -1,181 +1,981 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <!-- iOS Web App Meta Tags -->
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="Migul Lite">
-    <link rel="apple-touch-icon" href="apple-touch-icon.png">
-    <link rel="manifest" href="manifest.json">
-    <title>Migul Lite</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MIGUL LITE PRO V2 — Authentication</title>
+  <meta name="description" content="MIGUL LITE PRO V2 - Premium Mobile Optimization Suite. Authentication Required.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@700;800;900&display=swap" rel="stylesheet">
+  <style>
+    /* ═══════════════════════════════════════════
+       ROOT VARIABLES
+    ═══════════════════════════════════════════ */
+    :root {
+      --bg:        #08111D;
+      --bg2:       #0E1728;
+      --card:      #101C2F;
+      --primary:   #14C8FF;
+      --primary-d: #0A9CC7;
+      --success:   #00E676;
+      --warning:   #FFC107;
+      --danger:    #FF5252;
+      --border:    rgba(20,200,255,0.22);
+      --text:      #FFFFFF;
+      --sub:       #7A8BA3;
+      --muted:     #4A5A72;
+      --input-bg:  #0A1521;
+      --badge-bg:  #1A2A40;
+      --glow:      rgba(20,200,255,0.15);
+    }
+
+    /* ═══════════════════════════════════════════
+       RESET & BASE
+    ═══════════════════════════════════════════ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* ═══════════════════════════════════════════
+       ANIMATED BACKGROUND
+    ═══════════════════════════════════════════ */
+    .bg-layer {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 50% -10%, rgba(20,200,255,0.08) 0%, transparent 70%),
+        radial-gradient(ellipse 60% 40% at 80% 110%, rgba(20,200,255,0.05) 0%, transparent 60%),
+        linear-gradient(135deg, #050D1A 0%, #08111D 50%, #060F1C 100%);
+      animation: bgPulse 8s ease-in-out infinite alternate;
+    }
+    @keyframes bgPulse {
+      0%   { opacity: 1; }
+      100% { opacity: 0.85; }
+    }
+
+    /* Animated vignette */
+    .bg-layer::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 100% 100% at 50% 50%, transparent 40%, rgba(4,8,18,0.6) 100%);
+    }
+
+    /* Particle canvas */
+    #particles { position: fixed; inset: 0; z-index: 1; pointer-events: none; }
+
+    /* ═══════════════════════════════════════════
+       MAIN WRAPPER
+    ═══════════════════════════════════════════ */
+    .wrapper {
+      position: relative;
+      z-index: 10;
+      width: 100%;
+      max-width: 400px;
+      padding: 24px 16px 40px;
+      animation: cardEnter 0.7s cubic-bezier(0.22,1,0.36,1) both;
+    }
+    @keyframes cardEnter {
+      from { opacity: 0; transform: translateY(28px) scale(0.95); }
+      to   { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    /* ═══════════════════════════════════════════
+       PREMIUM GLASS CARD
+    ═══════════════════════════════════════════ */
+    .card {
+      background: linear-gradient(135deg, #14203A 0%, #101C2F 50%, #0C1625 100%);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 28px 26px;
+      box-shadow:
+        0 0 0 1px rgba(20,200,255,0.08),
+        0 0 40px rgba(20,200,255,0.08),
+        0 8px 60px rgba(0,0,0,0.6),
+        inset 0 1px 0 rgba(255,255,255,0.04);
+      position: relative;
+      overflow: hidden;
+    }
+    /* Top highlight line */
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 10%; right: 10%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(20,200,255,0.5), transparent);
+    }
+
+    /* ═══════════════════════════════════════════
+       CARD TOP ROW
+    ═══════════════════════════════════════════ */
+    .card-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      margin-bottom: 24px;
+    }
+    .logo { font-size: 32px; color: #FF4455; line-height: 1; }
+
+    .top-right { text-align: right; display: flex; flex-direction: column; gap: 6px; align-items: flex-end; }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      background: var(--badge-bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 3px 10px;
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--primary);
+      letter-spacing: 0.06em;
+    }
+    .server-status { text-align: right; }
+    .server-online {
+      display: flex; align-items: center; gap: 5px;
+      font-size: 11px; font-weight: 700; color: var(--success);
+      justify-content: flex-end;
+    }
+    .dot-online {
+      width: 7px; height: 7px; border-radius: 50%;
+      background: var(--success);
+      box-shadow: 0 0 6px var(--success);
+      animation: pulse 2s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50%       { opacity: 0.6; transform: scale(0.85); }
+    }
+    .server-sub { font-size: 9px; color: var(--sub); margin-top: 2px; }
+
+    /* ═══════════════════════════════════════════
+       TITLE
+    ═══════════════════════════════════════════ */
+    .card-title {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 28px;
+      font-weight: 900;
+      letter-spacing: 0.04em;
+      line-height: 1.1;
+      margin-bottom: 2px;
+    }
+    .card-title span { color: var(--primary); }
+    .card-subtitle {
+      font-size: 12px;
+      color: var(--sub);
+      letter-spacing: 0.08em;
+      margin-bottom: 22px;
+    }
+    .divider {
+      height: 1px;
+      background: var(--border);
+      margin: 0 0 22px;
+    }
+
+    /* ═══════════════════════════════════════════
+       SECTION LABEL
+    ═══════════════════════════════════════════ */
+    .section-label {
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--sub);
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    /* ═══════════════════════════════════════════
+       INPUT FIELD
+    ═══════════════════════════════════════════ */
+    .input-wrap {
+      position: relative;
+      margin-bottom: 14px;
+    }
+    .input-wrap .icon {
+      position: absolute;
+      left: 14px; top: 50%;
+      transform: translateY(-50%);
+      font-size: 14px;
+      color: var(--sub);
+      pointer-events: none;
+    }
+    .input-wrap input {
+      width: 100%;
+      height: 52px;
+      background: var(--input-bg);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 0 16px 0 40px;
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text);
+      outline: none;
+      transition: border-color 0.25s, box-shadow 0.25s;
+    }
+    .input-wrap input::placeholder { color: var(--muted); font-weight: 400; }
+    .input-wrap input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(20,200,255,0.12), inset 0 0 0 1px rgba(20,200,255,0.08);
+    }
+    .input-wrap input.error {
+      border-color: var(--danger);
+      box-shadow: 0 0 0 3px rgba(255,82,82,0.12);
+      animation: shake 0.4s ease;
+    }
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      20% { transform: translateX(-6px); }
+      40% { transform: translateX(6px); }
+      60% { transform: translateX(-4px); }
+      80% { transform: translateX(4px); }
+    }
+
+    /* ═══════════════════════════════════════════
+       BUTTONS
+    ═══════════════════════════════════════════ */
+    .btn-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+    .btn-outline {
+      height: 44px;
+      background: rgba(20,200,255,0.05);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      color: var(--primary);
+      font-family: 'Inter', sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+    }
+    .btn-outline:hover {
+      background: rgba(20,200,255,0.12);
+      box-shadow: 0 0 16px rgba(20,200,255,0.1);
+      transform: translateY(-1px);
+    }
+    .btn-outline:active { transform: scale(0.97); }
+
+    .btn-primary {
+      width: 100%;
+      height: 54px;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-d) 100%);
+      border: none;
+      border-radius: 14px;
+      color: #08111D;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 15px;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.15s, box-shadow 0.2s;
+      box-shadow: 0 4px 24px rgba(20,200,255,0.3), 0 0 0 0 rgba(20,200,255,0);
+      margin-bottom: 14px;
+    }
+    .btn-primary::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,0.15) 0%, transparent 60%);
+    }
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 32px rgba(20,200,255,0.4);
+    }
+    .btn-primary:active { transform: scale(0.97); }
+
+    /* Ripple effect */
+    .ripple {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.25);
+      transform: scale(0);
+      animation: rippleAnim 0.5s linear;
+      pointer-events: none;
+    }
+    @keyframes rippleAnim {
+      to { transform: scale(4); opacity: 0; }
+    }
+
+    /* ═══════════════════════════════════════════
+       REMEMBER CHECKBOX
+    ═══════════════════════════════════════════ */
+    .remember-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+    .remember-row input[type=checkbox] {
+      width: 16px; height: 16px;
+      accent-color: var(--primary);
+      cursor: pointer;
+    }
+    .remember-row label { font-size: 12px; color: var(--sub); cursor: pointer; }
+
+    /* ═══════════════════════════════════════════
+       DEVICE INFO SECTION
+    ═══════════════════════════════════════════ */
+    .device-section {
+      background: rgba(10,15,28,0.6);
+      border: 1px solid rgba(20,200,255,0.1);
+      border-radius: 14px;
+      padding: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .device-left h4 { font-size: 12px; font-weight: 700; color: var(--text); }
+    .device-left p  { font-size: 10px; color: var(--sub); margin-top: 2px; }
+    .device-right   { text-align: right; }
+    .device-right .d-label { font-size: 9px; color: var(--muted); }
+    .device-right .d-id    { font-size: 11px; font-weight: 700; color: var(--primary); margin-top: 2px; }
+
+    /* ═══════════════════════════════════════════
+       ─── ACTIVATED SCREEN ───
+    ═══════════════════════════════════════════ */
+    .activated { display: none; }
+
+    .license-active-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+    }
+    .license-active-title {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 17px;
+      font-weight: 800;
+      color: var(--success);
+    }
+    .badge-verified {
+      background: rgba(0,230,118,0.12);
+      border: 1px solid rgba(0,230,118,0.3);
+      border-radius: 6px;
+      padding: 3px 10px;
+      font-size: 9px;
+      font-weight: 700;
+      color: var(--success);
+    }
+
+    /* Stats grid 2x2 */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+    .stat-box {
+      background: var(--badge-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 12px;
+    }
+    .stat-box .s-label { font-size: 9px; color: var(--muted); margin-bottom: 4px; }
+    .stat-box .s-value { font-size: 22px; font-weight: 800; color: var(--primary); font-family: 'Montserrat', sans-serif; }
+    .stat-box .s-value.sm { font-size: 13px; color: var(--text); }
+    .stat-box .s-value.success { font-size: 12px; color: var(--success); }
+
+    /* ═══════════════════════════════════════════
+       STATUS TABLE
+    ═══════════════════════════════════════════ */
+    .status-table {
+      background: rgba(10,15,28,0.6);
+      border: 1px solid rgba(20,200,255,0.1);
+      border-radius: 14px;
+      padding: 14px;
+      margin-bottom: 16px;
+    }
+    .status-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 6px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+    }
+    .status-row:last-child { border-bottom: none; }
+    .status-row .s-name { font-size: 11px; color: var(--sub); }
+    .status-row .s-val  { font-size: 11px; font-weight: 700; color: var(--success); }
+
+    /* ═══════════════════════════════════════════
+       CARD FOOTER
+    ═══════════════════════════════════════════ */
+    .card-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 22px;
+      padding-top: 14px;
+      border-top: 1px solid var(--border);
+    }
+    .card-footer span { font-size: 9px; color: var(--muted); }
+
+    /* ═══════════════════════════════════════════
+       TOAST
+    ═══════════════════════════════════════════ */
+    .toast {
+      position: fixed;
+      bottom: 28px; left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 12px 22px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+      z-index: 9999;
+      transition: transform 0.4s cubic-bezier(0.22,1,0.36,1), opacity 0.4s;
+      opacity: 0;
+      white-space: nowrap;
+    }
+    .toast.show {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+    }
+
+    /* ═══════════════════════════════════════════
+       FLOATING MENU PREVIEW (web overlay demo)
+    ═══════════════════════════════════════════ */
+    .floating-btn-wrap {
+      text-align: center;
+      margin-top: 8px;
+    }
+    .floating-hint {
+      font-size: 10px;
+      color: var(--muted);
+      margin-top: 8px;
+      text-align: center;
+    }
+
+    /* Floating Menu Popup */
+    .floating-menu-popup {
+      display: none;
+      position: fixed;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 9990;
+      animation: popIn 0.35s cubic-bezier(0.22,1,0.36,1) both;
+    }
+    @keyframes popIn {
+      from { opacity: 0; transform: translate(-50%,-50%) scale(0.88); }
+      to   { opacity: 1; transform: translate(-50%,-50%) scale(1); }
+    }
+    .floating-menu-popup.show { display: block; }
+
+    .overlay-backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 9980;
+      backdrop-filter: blur(4px);
+    }
+    .overlay-backdrop.show { display: block; }
+
+    .fm-card {
+      width: 280px;
+      background: linear-gradient(135deg, #14203A, #101C2F, #0C1625);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 0 40px rgba(20,200,255,0.15), 0 20px 60px rgba(0,0,0,0.7);
+    }
+
+    /* FM Header */
+    .fm-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 14px;
+      background: rgba(20,200,255,0.05);
+      border-bottom: 1px solid var(--border);
+    }
+    .fm-logo-row { display: flex; align-items: center; gap: 6px; }
+    .fm-logo { color: #FF4455; font-size: 13px; }
+    .fm-name { font-weight: 800; font-size: 12px; letter-spacing: 0.05em; }
+    .fm-pro-badge {
+      background: var(--badge-bg);
+      border: 1px solid var(--border);
+      border-radius: 5px;
+      padding: 2px 6px;
+      font-size: 8px;
+      font-weight: 700;
+      color: var(--primary);
+    }
+    .fm-controls { display: flex; align-items: center; gap: 6px; }
+    .fm-fps {
+      background: var(--badge-bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 3px 8px;
+      font-size: 9px;
+      font-weight: 700;
+      color: var(--primary);
+    }
+    .fm-btn {
+      width: 26px; height: 26px;
+      border: none; background: none;
+      cursor: pointer;
+      font-size: 14px;
+      border-radius: 6px;
+      transition: background 0.15s;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .fm-btn:hover { background: rgba(255,255,255,0.08); }
+    .fm-btn.close { color: var(--danger); }
+    .fm-btn.mini  { color: var(--sub); }
+
+    /* FM Banner */
+    .fm-banner {
+      padding: 14px;
+      text-align: center;
+      border-bottom: 1px solid var(--border);
+    }
+    .fm-banner h3 {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 15px;
+      font-weight: 900;
+      letter-spacing: 0.08em;
+    }
+    .fm-banner-line {
+      width: 40px; height: 2px;
+      background: var(--primary);
+      margin: 7px auto;
+      border-radius: 2px;
+    }
+    .fm-banner p { font-size: 9px; color: var(--sub); letter-spacing: 0.12em; }
+
+    /* FM Feature Rows */
+    .fm-features { padding: 8px; display: flex; flex-direction: column; gap: 4px; }
+    .fm-feature-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 11px 12px;
+      background: rgba(10,15,28,0.5);
+      border: 1px solid rgba(20,200,255,0.08);
+      border-radius: 12px;
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .fm-feature-row:hover {
+      border-color: rgba(20,200,255,0.25);
+      background: rgba(20,200,255,0.04);
+    }
+    .fm-feature-name { font-size: 11px; font-weight: 700; color: var(--text); }
+
+    /* Toggle switch */
+    .toggle {
+      position: relative;
+      width: 38px; height: 21px;
+    }
+    .toggle input { opacity: 0; width: 0; height: 0; }
+    .toggle-slider {
+      position: absolute;
+      cursor: pointer;
+      inset: 0;
+      background: #1A2535;
+      border-radius: 21px;
+      transition: background 0.25s;
+    }
+    .toggle-slider::before {
+      content: '';
+      position: absolute;
+      height: 15px; width: 15px;
+      left: 3px; bottom: 3px;
+      background: var(--sub);
+      border-radius: 50%;
+      transition: transform 0.25s, background 0.25s;
+    }
+    .toggle input:checked + .toggle-slider { background: rgba(20,200,255,0.25); }
+    .toggle input:checked + .toggle-slider::before {
+      transform: translateX(17px);
+      background: var(--primary);
+    }
+
+    /* ═══════════════════════════════════════════
+       APPLE WEB APP META
+    ═══════════════════════════════════════════ */
+
+    /* ═══════════════════════════════════════════
+       RESPONSIVE
+    ═══════════════════════════════════════════ */
+    @media (max-width: 420px) {
+      .wrapper { padding: 16px 12px 32px; }
+      .card { padding: 22px 18px; }
+      .card-title { font-size: 24px; }
+    }
+  </style>
 </head>
 <body>
-    <!-- Background Video -->
-    <video autoplay loop muted playsinline id="bg-video">
-        <source src="l4oaly.mp4" type="video/mp4">
-    </video>
-    
-    <!-- Crosshair (Open Line Aim) -->
-    <div id="crosshair-container" class="hidden">
-        <div class="crosshair-circle"></div>
-        <div class="crosshair-inner"></div>
+
+<!-- Animated Background -->
+<div class="bg-layer"></div>
+<canvas id="particles"></canvas>
+
+<!-- Toast Notification -->
+<div class="toast" id="toast"></div>
+
+<!-- Overlay backdrop for floating menu -->
+<div class="overlay-backdrop" id="backdrop" onclick="closeFloatingMenu()"></div>
+
+<!-- Floating Menu Popup -->
+<div class="floating-menu-popup" id="floatingMenu">
+  <div class="fm-card">
+
+    <!-- FM Header -->
+    <div class="fm-header">
+      <div class="fm-logo-row">
+        <span class="fm-logo">◆</span>
+        <span class="fm-name">MIGUL LITE</span>
+        <span class="fm-pro-badge">PRO</span>
+      </div>
+      <div class="fm-controls">
+        <span class="fm-fps" id="fmFps">FPS: 60</span>
+        <button class="fm-btn mini" onclick="closeFloatingMenu()">—</button>
+        <button class="fm-btn close" onclick="closeFloatingMenu()">✕</button>
+      </div>
     </div>
 
-    <!-- Toast Notification -->
-    <div id="toast" class="hidden">chào mừng bạn đến với migul lite by pô mod</div>
-
-    <!-- Login Overlay -->
-    <div id="login-overlay" class="glass-panel">
-        <div class="header">
-            <div class="title-container">
-                <span class="title">MIGUL LITE VIP</span>
-            </div>
-        </div>
-        <hr class="divider">
-        <input type="text" id="input-key" class="cyber-input" placeholder="Enter Key">
-        <div class="login-buttons">
-            <button id="btn-get-key-1" class="btn-cyber-outline">Box Zalo 1</button>
-            <button id="btn-get-key-2" class="btn-cyber-outline">Box Zalo 2</button>
-        </div>
-        <button id="btn-login" class="btn-cyber-default">LOGIN</button>
+    <!-- FM Banner -->
+    <div class="fm-banner">
+      <h3>MIGUL LITE PRO</h3>
+      <div class="fm-banner-line"></div>
+      <p>OPTIMIZATION SUITE</p>
     </div>
 
-    <!-- Floating Menu Overlay -->
-    <div id="menu-overlay" class="glass-panel hidden">
-        <!-- Header -->
-        <div class="header">
-            <div class="title-container">
-                <span class="title">MIGUL LITE</span>
-                <span class="version">v1.0</span>
-            </div>
-            <div class="window-controls">
-                <button class="control-btn" id="btn-minimize">—</button>
-                <button class="control-btn" id="btn-close">✕</button>
-            </div>
-        </div>
-        
-        <hr class="divider">
-        
-        <!-- Device Info -->
-        <div class="device-panel">
-            <div class="device-name">MIGUL LITE CRACK BY PÔ</div>
-            <div class="device-stats">
-                <span>RAM: Optimized</span>
-                <span>BAT: 100%</span>
-                <span class="fps-text" id="fps-display">FPS: 60</span>
-            </div>
-        </div>
-        
-        <!-- Features List -->
-        <div class="features-list">
-            <!-- Item 1 -->
-            <label class="feature-item">
-                <div class="feature-info">
-                    <span class="feature-name">Aimlock Engine</span>
-                    <span class="feature-desc">Tinh Chỉnh Lock Vùng Đầu</span>
-                </div>
-                <div class="toggle-container">
-                    <input type="checkbox" class="cyber-toggle" id="cb_aimlock">
-                    <span class="toggle-slider"></span>
-                </div>
-            </label>
-            
-            <!-- Item 2 -->
-            <label class="feature-item">
-                <div class="feature-info">
-                    <span class="feature-name">Performance Engine</span>
-                    <span class="feature-desc">Tăng Hiệu Năng Hệ Thống</span>
-                </div>
-                <div class="toggle-container">
-                    <input type="checkbox" class="cyber-toggle" id="cb_performance">
-                    <span class="toggle-slider"></span>
-                </div>
-            </label>
-            
-            <!-- Item 3 -->
-            <label class="feature-item">
-                <div class="feature-info">
-                    <span class="feature-name">FPS Booster</span>
-                    <span class="feature-desc">Ổn Định Tốc Độ Khung Hình</span>
-                </div>
-                <div class="toggle-container">
-                    <input type="checkbox" class="cyber-toggle" id="cb_fps">
-                    <span class="toggle-slider"></span>
-                </div>
-            </label>
-
-            <!-- Item 4 -->
-            <label class="feature-item">
-                <div class="feature-info">
-                    <span class="feature-name">Network Optimizer</span>
-                    <span class="feature-desc">Tối Ưu Kết Nối Mạng</span>
-                </div>
-                <div class="toggle-container">
-                    <input type="checkbox" class="cyber-toggle" id="cb_network">
-                    <span class="toggle-slider"></span>
-                </div>
-            </label>
-            
-            <!-- Item 5 -->
-            <label class="feature-item">
-                <div class="feature-info">
-                    <span class="feature-name">Touch Response</span>
-                    <span class="feature-desc">Tăng Độ Nhạy Thao Tác Cảm Ứng</span>
-                </div>
-                <div class="toggle-container">
-                    <input type="checkbox" class="cyber-toggle" id="cb_touch">
-                    <span class="toggle-slider"></span>
-                </div>
-            </label>
-            
-            <!-- Item 6 -->
-            <label class="feature-item">
-                <div class="feature-info">
-                    <span class="feature-name">Open Line Aim</span>
-                    <span class="feature-desc">Mở Vòng Tròn Ngoại Tâm</span>
-                </div>
-                <div class="toggle-container">
-                    <input type="checkbox" class="cyber-toggle" id="cb_open_line_aim">
-                    <span class="toggle-slider"></span>
-                </div>
-            </label>
-
-            <!-- Item 7 -->
-            <label class="feature-item">
-                <div class="feature-info">
-                    <span class="feature-name">Smart Sensitivity</span>
-                    <span class="feature-desc">Tinh Chỉnh Độ Nhạy Thiết Bị</span>
-                </div>
-                <div class="toggle-container">
-                    <input type="checkbox" class="cyber-toggle" id="cb_smart_sens">
-                    <span class="toggle-slider"></span>
-                </div>
-            </label>
-            
-            <!-- Item 8 -->
-            <label class="feature-item">
-                <div class="feature-info">
-                    <span class="feature-name">Graphics Control</span>
-                    <span class="feature-desc">Tối Ưu Hiển Thị Đồ Họa</span>
-                </div>
-                <div class="toggle-container">
-                    <input type="checkbox" class="cyber-toggle" id="cb_graphics">
-                    <span class="toggle-slider"></span>
-                </div>
-            </label>
-        </div>
-        
-        <button id="btn_activate" class="btn-cyber-default">ACTIVATE</button>
+    <!-- FM Features -->
+    <div class="fm-features">
+      <div class="fm-feature-row" onclick="toggleFeature(this)">
+        <span class="fm-feature-name">⚡ Bypass Anti-Cheat v2</span>
+        <label class="toggle"><input type="checkbox"><span class="toggle-slider"></span></label>
+      </div>
+      <div class="fm-feature-row" onclick="toggleFeature(this)">
+        <span class="fm-feature-name">🎯 Hitbox Expander</span>
+        <label class="toggle"><input type="checkbox"><span class="toggle-slider"></span></label>
+      </div>
+      <div class="fm-feature-row" onclick="toggleFeature(this)">
+        <span class="fm-feature-name">🔫 Recoil Stabilizer</span>
+        <label class="toggle"><input type="checkbox"><span class="toggle-slider"></span></label>
+      </div>
+      <div class="fm-feature-row" onclick="toggleFeature(this)">
+        <span class="fm-feature-name">👁 X-Ray Vision Lite</span>
+        <label class="toggle"><input type="checkbox"><span class="toggle-slider"></span></label>
+      </div>
+      <div class="fm-feature-row" onclick="toggleFeature(this)">
+        <span class="fm-feature-name">🤖 Auto-Trigger Module</span>
+        <label class="toggle"><input type="checkbox"><span class="toggle-slider"></span></label>
+      </div>
+      <div class="fm-feature-row" onclick="toggleFeature(this)">
+        <span class="fm-feature-name">📡 Ping Spoofer</span>
+        <label class="toggle"><input type="checkbox"><span class="toggle-slider"></span></label>
+      </div>
     </div>
 
-    <!-- Minimized Icon -->
-    <div id="minimized-icon" class="hidden">
-        <img src="oke124141.png" alt="Migul Icon">
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     MAIN CARD
+═══════════════════════════════════════════ -->
+<div class="wrapper">
+  <div class="card" id="mainCard">
+
+    <!-- Top Row -->
+    <div class="card-top">
+      <div class="logo">◆</div>
+      <div class="top-right">
+        <div class="badge">v 2.1.4</div>
+        <div class="server-status">
+          <div class="server-online">
+            <div class="dot-online"></div>
+            Server Online
+          </div>
+          <div class="server-sub">Latency: 12 ms</div>
+        </div>
+      </div>
     </div>
 
-    <script src="script.js"></script>
+    <!-- Title -->
+    <div class="card-title">MIGUL LITE PRO <span>V2</span></div>
+    <div class="card-subtitle">Authentication Required</div>
+    <div class="divider"></div>
+
+    <!-- ══════════════════
+         LOGIN VIEW
+    ══════════════════ -->
+    <div id="loginView">
+      <div class="section-label">🔑 &nbsp;LICENSE KEY</div>
+      <div class="input-wrap">
+        <span class="icon">🔑</span>
+        <input type="password" id="keyInput" placeholder="Nhập Key để truy cập..." autocomplete="off">
+      </div>
+
+      <!-- Zalo Buttons -->
+      <div class="btn-row">
+        <button class="btn-outline" onclick="openZalo(1)">ZALO BOX 1</button>
+        <button class="btn-outline" onclick="openZalo(2)">ZALO BOX 2</button>
+      </div>
+
+      <!-- Login Button -->
+      <button class="btn-primary" id="loginBtn" onclick="handleLogin(event)">ĐĂNG NHẬP</button>
+
+      <!-- Remember -->
+      <div class="remember-row">
+        <input type="checkbox" id="remember" checked>
+        <label for="remember">Ghi nhớ thiết bị</label>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- Device Info -->
+      <div class="section-label">📱 &nbsp;DEVICE INFORMATION</div>
+      <div class="device-section">
+        <div class="device-left">
+          <h4 id="deviceName">Detecting...</h4>
+          <p id="deviceOS">Loading...</p>
+        </div>
+        <div class="device-right">
+          <div class="d-label">Device ID</div>
+          <div class="d-id" id="deviceId">—</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════
+         ACTIVATED VIEW
+    ══════════════════ -->
+    <div id="activatedView" class="activated">
+
+      <!-- License Active -->
+      <div class="license-active-header">
+        <div class="license-active-title">✓ LICENSE ACTIVE</div>
+        <div class="badge-verified">Verified ✓</div>
+      </div>
+
+      <!-- Stats 2x2 -->
+      <div class="stats-grid">
+        <div class="stat-box">
+          <div class="s-label">Days Remaining</div>
+          <div class="s-value">365</div>
+        </div>
+        <div class="stat-box">
+          <div class="s-label">Expiration</div>
+          <div class="s-value sm">12/08/2027</div>
+        </div>
+        <div class="stat-box">
+          <div class="s-label">User ID</div>
+          <div class="s-value sm" id="activatedDeviceId">A82F91KD</div>
+        </div>
+        <div class="stat-box">
+          <div class="s-label">Status</div>
+          <div class="s-value success">Premium Access</div>
+        </div>
+      </div>
+
+      <!-- BẬT MENU NỔI Button -->
+      <button class="btn-primary" onclick="openFloatingMenu(event)">BẬT MENU NỔI</button>
+
+      <div class="divider"></div>
+
+      <!-- System Status -->
+      <div class="section-label">SYSTEM STATUS</div>
+      <div class="status-table">
+        <div class="status-row"><span class="s-name">Overlay</span><span class="s-val">Ready ✓</span></div>
+        <div class="status-row"><span class="s-name">Security</span><span class="s-val">Enabled ✓</span></div>
+        <div class="status-row"><span class="s-name">License</span><span class="s-val">Valid ✓</span></div>
+        <div class="status-row"><span class="s-name">Server</span><span class="s-val">Online ✓</span></div>
+      </div>
+
+    </div>
+    <!-- end activatedView -->
+
+    <!-- Card Footer -->
+    <div class="card-footer">
+      <span>© MIGUL TEAM</span>
+      <span>Version 2.1.4 &nbsp;•&nbsp; Premium Edition</span>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     JAVASCRIPT
+═══════════════════════════════════════════ -->
+<script>
+  // ── Particle System ──
+  const canvas = document.getElementById('particles');
+  const ctx = canvas.getContext('2d');
+  let W, H, particles = [];
+
+  function resize() {
+    W = canvas.width  = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+  }
+  window.addEventListener('resize', resize);
+  resize();
+
+  function Particle() {
+    this.x = Math.random() * W;
+    this.y = Math.random() * H;
+    this.r = Math.random() * 1.2 + 0.3;
+    this.vx = (Math.random() - 0.5) * 0.3;
+    this.vy = (Math.random() - 0.5) * 0.3;
+    this.alpha = Math.random() * 0.4 + 0.05;
+  }
+
+  for (let i = 0; i < 80; i++) particles.push(new Particle());
+
+  function drawParticles() {
+    ctx.clearRect(0, 0, W, H);
+    particles.forEach(p => {
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(20,200,255,${p.alpha})`;
+      ctx.fill();
+      p.x += p.vx; p.y += p.vy;
+      if (p.x < 0) p.x = W; if (p.x > W) p.x = 0;
+      if (p.y < 0) p.y = H; if (p.y > H) p.y = 0;
+    });
+    requestAnimationFrame(drawParticles);
+  }
+  drawParticles();
+
+  // ── Device Detection ──
+  (function detectDevice() {
+    const ua = navigator.userAgent;
+    let name = 'Web Browser';
+    let os = 'Unknown OS';
+
+    if (/Android/i.test(ua)) {
+      os = 'Android ' + (ua.match(/Android (\d+\.\d+)/) || ['',''])[1];
+      name = 'Android Device';
+    } else if (/iPhone|iPad/i.test(ua)) {
+      os = 'iOS ' + (ua.match(/OS (\d+)/) || ['',''])[1];
+      name = /iPad/i.test(ua) ? 'iPad' : 'iPhone';
+    } else if (/Windows/i.test(ua)) {
+      os = 'Windows';
+      name = 'Windows PC';
+    } else if (/Mac/i.test(ua)) {
+      os = 'macOS';
+      name = 'Mac';
+    }
+
+    document.getElementById('deviceName').textContent = name;
+    document.getElementById('deviceOS').textContent   = os;
+
+    // Pseudo device ID from userAgent hash
+    let hash = 0;
+    for (let i = 0; i < ua.length; i++) hash = ((hash << 5) - hash) + ua.charCodeAt(i);
+    const id = Math.abs(hash).toString(16).toUpperCase().substring(0,8);
+    const did = id.substring(0,4) + '-' + id.substring(4,8);
+    document.getElementById('deviceId').textContent = did;
+    document.getElementById('activatedDeviceId').textContent = did.replace('-','');
+  })();
+
+  // ── Toast ──
+  function showToast(msg, color = '#FFFFFF') {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.style.color = color;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2800);
+  }
+
+  // ── Ripple ──
+  function createRipple(e, btn) {
+    const r = document.createElement('span');
+    const rect = btn.getBoundingClientRect();
+    r.className = 'ripple';
+    r.style.cssText = `width:${btn.offsetWidth}px;height:${btn.offsetWidth}px;left:${e.clientX-rect.left-btn.offsetWidth/2}px;top:${e.clientY-rect.top-btn.offsetWidth/2}px`;
+    btn.appendChild(r);
+    setTimeout(() => r.remove(), 500);
+  }
+
+  // ── Login ──
+  function handleLogin(e) {
+    createRipple(e, document.getElementById('loginBtn'));
+    const key = document.getElementById('keyInput').value.trim();
+    if (key === '8383') {
+      showToast('✓ License Activated Successfully!', '#00E676');
+      setTimeout(() => {
+        document.getElementById('loginView').style.animation = 'fadeOut 0.3s ease forwards';
+        setTimeout(() => {
+          document.getElementById('loginView').style.display = 'none';
+          const av = document.getElementById('activatedView');
+          av.style.display = 'block';
+          av.style.animation = 'cardEnter 0.45s cubic-bezier(0.22,1,0.36,1) both';
+        }, 300);
+      }, 400);
+    } else {
+      const inp = document.getElementById('keyInput');
+      inp.classList.add('error');
+      setTimeout(() => inp.classList.remove('error'), 800);
+      showToast('❌ Key không hợp lệ — Nhấn Zalo để lấy Key!', '#FF5252');
+    }
+  }
+
+  // Allow Enter key
+  document.getElementById('keyInput').addEventListener('keydown', e => {
+    if (e.key === 'Enter') handleLogin(e);
+  });
+
+  // ── Zalo Links ──
+  function openZalo(box) {
+    const urls = {
+      1: 'https://zalo.me/g/aafmgt330',
+      2: 'https://zalo.me/g/xpimti503'
+    };
+    window.open(urls[box], '_blank');
+  }
+
+  // ── Floating Menu ──
+  function openFloatingMenu(e) {
+    createRipple(e, e.currentTarget);
+    document.getElementById('floatingMenu').classList.add('show');
+    document.getElementById('backdrop').classList.add('show');
+  }
+  function closeFloatingMenu() {
+    document.getElementById('floatingMenu').classList.remove('show');
+    document.getElementById('backdrop').classList.remove('show');
+  }
+
+  function toggleFeature(row) {
+    const cb = row.querySelector('input[type=checkbox]');
+    cb.checked = !cb.checked;
+    row.style.borderColor = cb.checked ? 'rgba(20,200,255,0.4)' : 'rgba(20,200,255,0.08)';
+    row.style.background  = cb.checked ? 'rgba(20,200,255,0.06)' : '';
+  }
+
+  // ── FPS Simulator ──
+  setInterval(() => {
+    const fps = Math.floor(Math.random() * 4) + 58;
+    const el = document.getElementById('fmFps');
+    if (el) el.textContent = 'FPS: ' + fps;
+  }, 1000);
+
+  // ── Fade Out keyframe ──
+  const style = document.createElement('style');
+  style.textContent = '@keyframes fadeOut { to { opacity:0; transform:translateY(10px); } }';
+  document.head.appendChild(style);
+</script>
 </body>
 </html>
